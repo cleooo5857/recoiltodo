@@ -10,6 +10,10 @@ const variantCSS = {
     background: none;
     color: ${({ theme }) => theme.palette.primary[300]};
   `,
+  'primary-disabled': css`
+  background: #edededed;
+  color: ${({ theme }) => theme.palette.primary[500]};
+`,
 };
 
 const shapeCSS = {

@@ -10,28 +10,32 @@ function SignUpForm({ form }) {
   const [email,setemail] = useInput('')
   const [password,setpassword] = useInput('')
   const [passowrdcek,setpasswordcek] = useInput('')
+  const [disabled, setdisabled] = useState(true)
+  const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
 
   useEffect(() => {
-    const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
-    if(!emailRegEx.test(email)) console.log('이메일 형식이 아닙니다.');
-  },[email])
+  },[email,passowrdcek,password])
   
-  useEffect(() => {
-    // 0부터 검사할 경우 랜더링 되자마자 비밀번호 경고뜸.
-    if(password.length >= 1 && password.length < 9){
-      console.log('비밀번호는 8글자 이상입니다.');  
-      if(password !== passowrdcek) console.log('비밀번호 같지않음');
-    }
-
-  },[passowrdcek,password])
-  // 버튼 비활성화
-
   const onLoginSubmit = (e) => {
     e.preventDefault();
     form = 'login';
+    if(!emailRegEx.test(email)) return console.log('이메일 형식이 아닙니다.');
+    if(password.length >= 1 && password.length > 9 ){
+      console.log('비밀번호 맞는 양식입니다..')
+    }else{
+      return console.log('8글자 이상 입력해야합니다.')
+    }
+    if(password !== passowrdcek) {
+      return console.log('일치하지않는다');
+    }
+    
   };
 
-  //hooks 각 컴포넌트들의 input 값을 보내야함
+
+  useEffect(() => {
+    const sign = emailRegEx.test(email) && passowrdcek.length >= 8 && password === passowrdcek
+    sign ? setdisabled(false) : setdisabled(true)
+  },[email,passowrdcek,password])
   
 
   return (
@@ -48,9 +52,15 @@ function SignUpForm({ form }) {
         <input value={passowrdcek} onChange={setpasswordcek} placeholder="password confirm" />
         <span>암호 확인</span>
       </S.InputBox>
-      <Button variant="primary" size="full">
-        회원가입
-      </Button>
+      {
+        !disabled ? 
+        <Button disabled={disabled} variant="primary" size="full">회원가입</Button>
+        :
+        <Button disabled={disabled} variant="primary-disabled" size="full">회원가입</Button> 
+      }
+      
+        
+      
     </S.Form>
   );
 }
