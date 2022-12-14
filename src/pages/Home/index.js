@@ -6,7 +6,7 @@ import SignUpForm from './components/Form/SignUpForm';
 
 function HomePage() {
   const [ form , setform ] = useState('login');
-
+console.log(form);
   const onFormChange = (e) => {
     const { innerText } = e.target;
     setform(innerText.toLowerCase('SIGN'));
@@ -25,7 +25,7 @@ function HomePage() {
           LOGIN
         </S.SignUpSelector>
       </S.Header>
-      {form === 'login' ? <LoginForm /> : <SignUpForm form={form} />}
+      {form === 'login' ? <LoginForm /> : <SignUpForm form={form} setform={setform} />}
     </S.Wrapper>
   );
 }

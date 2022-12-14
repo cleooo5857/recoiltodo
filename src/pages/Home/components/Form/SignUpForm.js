@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { flexCenter } from 'styles/common';
 import useInput from '../../../../hooks/InputUtils'
 
-function SignUpForm({ form }) {
+function SignUpForm({ form, setform}) {
 
   const [email,setemail] = useInput('')
   const [password,setpassword] = useInput('')
@@ -13,12 +13,9 @@ function SignUpForm({ form }) {
   const [disabled, setdisabled] = useState(true)
   const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
 
-  useEffect(() => {
-  },[email,passowrdcek,password])
   
   const onLoginSubmit = (e) => {
     e.preventDefault();
-    form = 'login';
     if(!emailRegEx.test(email)) return console.log('이메일 형식이 아닙니다.');
     if(password.length >= 1 && password.length > 9 ){
       console.log('비밀번호 맞는 양식입니다..')
@@ -28,6 +25,8 @@ function SignUpForm({ form }) {
     if(password !== passowrdcek) {
       return console.log('일치하지않는다');
     }
+    alert('회원가입성공')
+    setform('login')
     
   };
 
