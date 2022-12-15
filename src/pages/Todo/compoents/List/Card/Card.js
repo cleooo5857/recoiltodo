@@ -2,23 +2,44 @@ import styled from 'styled-components';
 import { flexAlignCenter, flexCenter } from 'styles/common';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faBan, faPen } from '@fortawesome/free-solid-svg-icons';
+import { useSelector, useDispatch} from 'react-redux';
+import { useState } from 'react';
+import { removetodo } from 'reducer/todo';
 
 function TodoCard({ todo }) {
+  const [state,setstate] = useState(todo.state);
+  const dispatch = useDispatch();
+
+  const onChecked = () => {
+    // setcheck(!todo.state)
+    state ? setstate(false) : setstate(true)
+  }
+
+  const onDeleteList = () => {
+    console.log(todo.id);
+    dispatch({
+      type: removetodo,
+      payload : {
+        id : todo.id
+      }
+    })
+  }
+  
   return (
-    <S.Wrapper state={todo.state}>
+    <S.Wrapper state={state}>
       <S.Header>
-        <S.StateBox state={todo.state}>
-          <FontAwesomeIcon icon={faCheck} />
+        <S.StateBox state={state}>
+          <FontAwesomeIcon onClick={onChecked} icon={faCheck} />
         </S.StateBox>
-        <S.Title state={todo.state}>
+        <S.Title state={state}>
           {todo.title}
           <div>
             <FontAwesomeIcon icon={faPen} />
-            <FontAwesomeIcon icon={faBan} />
+            <FontAwesomeIcon onClick={onDeleteList} icon={faBan} />
           </div>
         </S.Title>
       </S.Header>
-      <S.Content state={todo.state}>{todo.content}</S.Content>
+      <S.Content state={state}>{todo.content}</S.Content>
     </S.Wrapper>
   );
 }

@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { flexCenter } from 'styles/common';
-import useInput from '../../../../hooks/InputUtils'
+import useInput from 'hooks/InputUtils'
 
 function SignUpForm({ form, setform}) {
 

@@ -5,24 +5,72 @@ import TodoFormModal from './compoents/Modal/Form/Form';
 import TodoList from './compoents/List/List';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { addtodo } from 'reducer/todo';
+import { useState } from 'react';
+
 
 function TodoPage() {
-  const onAddTodo = new Promise((resolve) => setTimeout(() => resolve('todo'), 3000));
 
-  
+  // const onAddTodo = new Promise((resolve) => 
+  // setTimeout(() => 
+  // resolve(), 1000));
+  // console.log(onAddTodo); 
+  const [isOpenSignUpModal, setIsOpenSigupModal] = useState(false);
+  const {todo} = useSelector((state) => state.todo)
+  const dispatch = useDispatch();
+  console.log(todo.id);
+
+  const onOpenSignUpModal = () => {
+    setIsOpenSigupModal(false);
+  };
+
+  const onCloseSignUpModal = () => {
+      setIsOpenSigupModal(true);
+  };
+
+
+  const onAddTodo = (title, content) =>
+    new Promise((reject, resolve) => {
+        if (!title || !content) {
+          return resolve();
+        }
+      setTimeout(() => {
+        const newTodo = {
+          id: Math.floor(Math.random() * 100000),
+          title,
+          content,
+          state: false,
+        };
+        reject(newTodo);
+      }, 1000);
+    }).then((res) => {
+      // setTodoList([...todoList, res]);
+      dispatch({
+        type: addtodo,
+        payload: {
+          id: res.id,
+          title:res.title,
+          content: res.content,
+          state: res.state
+        }
+      })
+      onCloseSignUpModal();
+    });
 
   return (
     <>
-      <TodoFormModal onAddTodo={onAddTodo} />
+     {!isOpenSignUpModal && <TodoFormModal onAddTodo={onAddTodo} onCloseSignUpModal={onCloseSignUpModal} />}
       <S.Wrapper>
         <S.Container>
           <S.Title>List</S.Title>
           <S.Content>
+            {/* List 페이지 */}
             <TodoList />
           </S.Content>
           <S.ButtonBox>
             {/* 버튼 */}
-            <Button variant="primary" size="full">
+            <Button onClick={onOpenSignUpModal} variant="primary" size="full">
               추가
             </Button>
           </S.ButtonBox>

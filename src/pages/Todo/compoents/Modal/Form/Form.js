@@ -1,12 +1,19 @@
 import { flexAlignCenter, flexCenter, ModalBackground } from 'styles/common';
 import styled from 'styled-components';
-import { ToastContainer, toast } from 'react-toastify';
+import {  toast } from 'react-toastify';
+import useInput from 'hooks/InputUtils';
+import { useState } from 'react';
 
-function TodoFormModal({ onAddTodo }) {
+function TodoFormModal({ onAddTodo,onCloseSignUpModal,onOpenSignUpModal }) {
+
+  const [title, settitle] = useInput('');
+  const [content, setcontent] = useInput('');
+
+
 
   const showToastMessage = (e) => {
     e.preventDefault();
-    toast.promise(onAddTodo, {
+    toast.promise(onAddTodo(title,content), {
       pending: 'TODO LOADING',
       success: 'TODO SUCCESS',
       error: 'TODO ERROR',
@@ -14,18 +21,19 @@ function TodoFormModal({ onAddTodo }) {
   };
 
 
+
   return (
     <S.Wrapper>
       <S.Form onSubmit={showToastMessage}>
         <S.Title>
           <span>ADD TODO LIST</span>
-          <button type="button">X</button>
+          <button onClick={onCloseSignUpModal} type="button">X</button>
         </S.Title>
         <S.Content>
-          <input placeholder="제목을 입력해주세요" />
-          <textarea placeholder="할 일 내용을 입력해주세요"></textarea>
+          <input value={title} onChange={settitle} placeholder="제목을 입력해주세요" />
+          <textarea value={content} onChange={setcontent} placeholder="할 일 내용을 입력해주세요"></textarea>
         </S.Content>
-        <S.Button>ADD</S.Button>
+        <S.Button onClick={onOpenSignUpModal}>ADD</S.Button>
       </S.Form>
     </S.Wrapper>
   );

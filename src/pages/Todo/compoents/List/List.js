@@ -1,50 +1,14 @@
 import TodoCard from './Card/Card';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 function TodoList() {
-  const arr = [
-    {
-      id: 1,
-      title: 'title1',
-      content: 'content1',
-      state: false,
-      edit: false,
-    },
-    {
-      id: 2,
-      title: 'title2',
-      content: 'content2',
-      state: true,
-      edit: false,
-    },
-    {
-      id: 3,
-      title: 'title3',
-      content: 'content3',
-      state: false,
-      edit: false,
-    },
-    {
-      id: 4,
-      title: 'title4',
-      content: 'content4',
-      state: false,
-      edit: false,
-    },
-    {
-      id: 5,
-      title: 'title5',
-      content: 'content5',
-      state: true,
-      edit: false,
-    },
-  ];
-
-  console.log(arr.length);
+  const {todo} = useSelector((state) => state.todo)
+  console.log(todo);
 
   return (
     <S.Wrapper>
-      {arr.map((item) => (
+      {todo.map((item) => (
         <TodoCard key={item.id} todo={item} />
       ))}
     </S.Wrapper>
