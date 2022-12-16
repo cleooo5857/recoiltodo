@@ -47,7 +47,7 @@ export const todoSlice = createSlice({
   initialState,
   reducers: {
     addtodo: (state, action) => {
-      state.todo.unshift(action.payload);
+      state.todo.push(action.payload);
 
     },
     removetodo: (state, action) => {
@@ -55,8 +55,8 @@ export const todoSlice = createSlice({
       state.todo = state.todo.filter((item) => item.id !== action.payload.id);
     },
     updatetodo: (state, action) => {
-      // const todo = state.todos.find((item) => item.id === action.payload.id);
-      // todo.todo = action.payload.todo;
+      const todo = state.todo.find((item) => item.id === action.payload.id);
+      todo.todo = action.payload.todo;
     },
   },
 });

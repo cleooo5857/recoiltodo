@@ -12,11 +12,10 @@ function SignUpForm({ form, setform}) {
   const [passowrdcek,setpasswordcek] = useInput('')
   const [disabled, setdisabled] = useState(true)
   const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
-
+  const [warningmsg , setwarningmsg] = useState(false)
   
   const onLoginSubmit = (e) => {
     e.preventDefault();
-    if(!emailRegEx.test(email)) return console.log('이메일 형식이 아닙니다.');
     if(password.length >= 1 && password.length > 9 ){
       console.log('비밀번호 맞는 양식입니다..')
     }else{
@@ -24,7 +23,7 @@ function SignUpForm({ form, setform}) {
     }
     if(password !== passowrdcek) {
       return console.log('일치하지않는다');
-    }
+    } setwarningmsg(true)
     alert('회원가입성공')
     setform('login')
     
@@ -34,6 +33,12 @@ function SignUpForm({ form, setform}) {
   useEffect(() => {
     const sign = emailRegEx.test(email) && passowrdcek.length >= 8 && password === passowrdcek
     sign ? setdisabled(false) : setdisabled(true)
+    if(email.length >= 1 ){
+      setwarningmsg(true)
+      if(emailRegEx.test(email)){
+        setwarningmsg(false)
+      }
+    }
   },[email,passowrdcek,password])
   
 
@@ -43,6 +48,7 @@ function SignUpForm({ form, setform}) {
         <input value={email} onChange={setemail} placeholder="e-mail" />
         <span>이메일</span>
       </S.InputBox>
+          <S.Warningmsg warningmsg={warningmsg}><p>이메일 형식이 맞지 않습니다.</p></S.Warningmsg>
       <S.InputBox>
         <input value={password} onChange={setpassword} placeholder="password" />
         <span>암호</span>
@@ -88,7 +94,7 @@ const InputBox = styled.div`
     text-align: center;
   }
 
-  & span {
+  &  span {
     position: absolute;
     left: 15px;
     top: -5px;
@@ -97,9 +103,24 @@ const InputBox = styled.div`
     z-index: 1;
     padding: 0 5px;
   }
+
+   
 `;
+
+const Warningmsg = styled.div`
+  width : 80%;
+  margin-top: -10px;
+  padding-bottom: 15px;
+  display: ${({ warningmsg }) => (warningmsg ? 'block' : 'none')};
+  & p {
+    font-size: 12px;
+    color : red;
+    
+  }
+`
 
 const S = {
   Form,
   InputBox,
+  Warningmsg,
 };

@@ -19,7 +19,6 @@ function TodoPage() {
   const [isOpenSignUpModal, setIsOpenSigupModal] = useState(false);
   const {todo} = useSelector((state) => state.todo)
   const dispatch = useDispatch();
-  console.log(todo.id);
 
   const onOpenSignUpModal = () => {
     setIsOpenSigupModal(false);
@@ -29,7 +28,6 @@ function TodoPage() {
       setIsOpenSigupModal(true);
   };
 
-
   const onAddTodo = (title, content) =>
     new Promise((reject, resolve) => {
         if (!title || !content) {
@@ -37,7 +35,7 @@ function TodoPage() {
         }
       setTimeout(() => {
         const newTodo = {
-          id: Math.floor(Math.random() * 100000),
+          id: Object.keys(todo).length + 1,
           title,
           content,
           state: false,
@@ -46,15 +44,12 @@ function TodoPage() {
       }, 1000);
     }).then((res) => {
       // setTodoList([...todoList, res]);
-      dispatch({
-        type: addtodo,
-        payload: {
+      dispatch(addtodo({
           id: res.id,
           title:res.title,
           content: res.content,
           state: res.state
-        }
-      })
+      }))
       onCloseSignUpModal();
     });
 

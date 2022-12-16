@@ -4,42 +4,66 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faBan, faPen } from '@fortawesome/free-solid-svg-icons';
 import { useSelector, useDispatch} from 'react-redux';
 import { useState } from 'react';
-import { removetodo } from 'reducer/todo';
+import { removetodo, updatetodo } from 'reducer/todo';
+import useInput from 'hooks/InputUtils';
 
 function TodoCard({ todo }) {
   const [state,setstate] = useState(todo.state);
+  const [TodoContent, setTodoContent] = useInput(todo.content);
+  const [edit,setedit] = useState(false)
   const dispatch = useDispatch();
 
-  const onChecked = () => {
+
+  const onCheckedList = () => {
     // setcheck(!todo.state)
     state ? setstate(false) : setstate(true)
   }
 
-  const onDeleteList = () => {
-    console.log(todo.id);
-    dispatch({
-      type: removetodo,
-      payload : {
-        id : todo.id
-      }
-    })
+  const onUpdateTodo = () => {
+    if(TodoContent === todo.content) return setedit(false) 
+    dispatch(updatetodo({
+        id: todo.id,
+        content: TodoContent
+    }))
+    setedit(false);
+  }
+
+  const onClickEditBtn = () => {
+    setedit(true)
+  }
+
+  const onDeleteTodo = () => {
+    const confrimCheck = window.confirm("해당 리스트를 삭제하시겠습니까?")
+    if(confrimCheck){
+      dispatch(removetodo({id : todo.id}))
+      alert('삭제됨')
+    }else{
+      alert('취소되었습니다.')
+    }
+    
   }
   
   return (
     <S.Wrapper state={state}>
       <S.Header>
         <S.StateBox state={state}>
-          <FontAwesomeIcon onClick={onChecked} icon={faCheck} />
+          <FontAwesomeIcon onClick={onCheckedList} icon={faCheck} />
         </S.StateBox>
         <S.Title state={state}>
           {todo.title}
           <div>
-            <FontAwesomeIcon icon={faPen} />
-            <FontAwesomeIcon onClick={onDeleteList} icon={faBan} />
+            <FontAwesomeIcon onClick={edit ? onUpdateTodo : onClickEditBtn} icon={faPen} />
+            <FontAwesomeIcon onClick={onDeleteTodo} icon={faBan} />
           </div>
         </S.Title>
       </S.Header>
-      <S.Content state={state}>{todo.content}</S.Content>
+      <S.Content state={state}>
+        { edit ?
+          <textarea value={TodoContent} onChange={setTodoContent}></textarea> 
+          :
+          todo.content
+        }
+      </S.Content>
     </S.Wrapper>
   );
 }
