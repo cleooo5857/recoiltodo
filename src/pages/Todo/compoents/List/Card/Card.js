@@ -36,7 +36,7 @@ function TodoCard({ todo }) {
     const confrimCheck = window.confirm("해당 리스트를 삭제하시겠습니까?")
     if(confrimCheck){
       dispatch(removetodo({id : todo.id}))
-      alert('삭제됨')
+      alert('삭제되었습니다.')
     }else{
       alert('취소되었습니다.')
     }
