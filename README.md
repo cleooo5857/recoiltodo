@@ -12,3 +12,5 @@
 3.) 새로안 기술
 
  ㄴ css도 state값으로 변경하고자 하는 것들이 가능
+
+4.) recoil, reactQuery 사용
